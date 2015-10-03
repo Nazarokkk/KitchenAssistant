@@ -4,7 +4,6 @@ import com.example.nazarkorchak.kitchenassistant.model.Recipe;
 
 import java.util.List;
 
-
 public class LoadTrendingEvent {
     private List<Recipe> recipes;
 

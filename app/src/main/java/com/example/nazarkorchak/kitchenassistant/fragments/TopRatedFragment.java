@@ -1,19 +1,23 @@
 package com.example.nazarkorchak.kitchenassistant.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.nazarkorchak.kitchenassistant.R;
 
 import de.greenrobot.event.EventBus;
 
+import com.example.nazarkorchak.kitchenassistant.activity.RecipeInfoActivity;
 import com.example.nazarkorchak.kitchenassistant.adapter.RecipesGridAdapter;
 import com.example.nazarkorchak.kitchenassistant.events.LoadTopRatedEvent;
+import com.example.nazarkorchak.kitchenassistant.events.RecipeClickEvent;
 import com.example.nazarkorchak.kitchenassistant.events.TopRatedEvent;
 import com.example.nazarkorchak.kitchenassistant.model.Recipe;
 
@@ -54,6 +58,15 @@ public class TopRatedFragment extends Fragment {
         mAdapter = new RecipesGridAdapter(getActivity(), recipeList);
         gridView.setAdapter(mAdapter);
 
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                EventBus.getDefault().post(new RecipeClickEvent(recipeList.get(position).getRecipe_id()));
+                startActivity(new Intent(getActivity(), RecipeInfoActivity.class));
+                recipeList.clear();
+            }
+        });
         return rootView;
     }
 

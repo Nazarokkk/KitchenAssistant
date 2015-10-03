@@ -1,21 +1,19 @@
-package com.example.nazarkorchak.kitchenassistant.fragments;
+package com.example.nazarkorchak.kitchenassistant.activity;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.nazarkorchak.kitchenassistant.R;
-import com.example.nazarkorchak.kitchenassistant.activity.RecipeInfoActivity;
 import com.example.nazarkorchak.kitchenassistant.adapter.RecipesGridAdapter;
 import com.example.nazarkorchak.kitchenassistant.events.LoadTrendingEvent;
 import com.example.nazarkorchak.kitchenassistant.events.RecipeClickEvent;
-import com.example.nazarkorchak.kitchenassistant.events.TrendingEvent;
 import com.example.nazarkorchak.kitchenassistant.model.Recipe;
 
 import java.util.ArrayList;
@@ -23,21 +21,15 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-public class TrendingFragment extends Fragment{
+public class SearchActivity extends AppCompatActivity {
 
     List<Recipe> recipeList = new ArrayList<>();
     RecipesGridAdapter mAdapter;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
-        EventBus.getDefault().post(new TrendingEvent());
+        EventBus.getDefault().register(this);
     }
 
     public void onEventMainThread(LoadTrendingEvent event) {
@@ -48,12 +40,15 @@ public class TrendingFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragments_grid, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.my_grid_view);
-        mAdapter = new RecipesGridAdapter(getActivity(), recipeList);
+        GridView gridView = (GridView) findViewById(R.id.my_grid_view);
+        mAdapter = new RecipesGridAdapter(getApplicationContext(), recipeList);
         gridView.setAdapter(mAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,17 +56,26 @@ public class TrendingFragment extends Fragment{
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 EventBus.getDefault().post(new RecipeClickEvent(recipeList.get(position).getRecipe_id()));
-                startActivity(new Intent(getActivity(), RecipeInfoActivity.class));
-                recipeList.clear();
+                startActivity(new Intent(getApplicationContext(), RecipeInfoActivity.class));
             }
         });
-
-        return rootView;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onStop() {
         EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

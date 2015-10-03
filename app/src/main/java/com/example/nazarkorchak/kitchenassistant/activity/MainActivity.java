@@ -1,12 +1,23 @@
-package com.example.nazarkorchak.kitchenassistant;
+package com.example.nazarkorchak.kitchenassistant.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 
+import com.example.nazarkorchak.kitchenassistant.R;
 import com.example.nazarkorchak.kitchenassistant.adapter.PagerAdapter;
+import com.example.nazarkorchak.kitchenassistant.events.SendSearchQueryEvent;
+
+import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,4 +57,37 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                EventBus.getDefault().post(new SendSearchQueryEvent(query));
+                Log.e("Search", query);
+                query = null;
+                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+
+        return true;
+    }
 }
