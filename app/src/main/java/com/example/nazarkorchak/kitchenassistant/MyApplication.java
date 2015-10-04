@@ -61,7 +61,6 @@ public class MyApplication extends Application {
 
         Map<String, String> mMap = new HashMap<>();
 
-
         mMap.put("key", Constants.getKey());
         mMap.put("sort", "t");
 
@@ -81,8 +80,6 @@ public class MyApplication extends Application {
 
         RecipeListResponse recipeListResponse = myApi.getRecipeList(mMap);
         List<Recipe> recipeList = recipeListResponse.getRecipes();
-
-        Log.e("Search1", recipeList.get(0).toString());
 
         EventBus.getDefault().post(new LoadTrendingEvent(recipeList));
     }

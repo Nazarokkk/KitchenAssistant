@@ -29,23 +29,14 @@ public class RecipeInfo {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
 
     public List<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
-        this.ingredients = ingredients;
-    }
 
     public String getImage_url() {
         return image_url;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
 }

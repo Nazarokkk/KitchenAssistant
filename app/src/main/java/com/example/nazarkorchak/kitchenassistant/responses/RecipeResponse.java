@@ -11,7 +11,4 @@ public class RecipeResponse {
         return recipe;
     }
 
-    public void setRecipe(RecipeInfo recipe) {
-        this.recipe = recipe;
-    }
 }

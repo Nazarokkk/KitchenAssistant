@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
 
                 EventBus.getDefault().post(new SendSearchQueryEvent(query));
-                Log.e("Search", query);
                 query = null;
                 startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                 return true;

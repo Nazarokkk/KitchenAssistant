@@ -17,10 +17,6 @@ public class Recipe {
         return recipe_id;
     }
 
-    public void setRecipe_id(String recipe_id) {
-        this.recipe_id = recipe_id;
-    }
-
     public String getImage_url() {
         return image_url;
     }

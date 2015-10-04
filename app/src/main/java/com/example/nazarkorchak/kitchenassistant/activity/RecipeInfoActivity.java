@@ -21,7 +21,6 @@ import de.greenrobot.event.EventBus;
 
 public class RecipeInfoActivity extends AppCompatActivity {
 
-    //http://food2fork.com/api/get?key=7a082635d1596f0153b10c1ce1517bbd&rId=975e33
     private ImageView image;
     private String image_id;
     private TextView publisher;
